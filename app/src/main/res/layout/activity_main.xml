@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -44,9 +42,23 @@
             android:layout_height="wrap_content"/>
     </LinearLayout>
     <Button
-        android:layout_margin="10dp"
-        android:layout_centerHorizontal="true"
+        android:id="@+id/buttonAddRange"
         android:layout_below="@+id/inputArea"
+        android:text="ADD RANGE"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/buttonReset"
+        android:layout_below="@+id/buttonAddRange"
+        android:text="RESET"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/buttonReset"
         android:id="@+id/buttonRandom"
         android:text="RANDOM"
         android:layout_width="wrap_content"

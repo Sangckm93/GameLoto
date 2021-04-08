@@ -17,12 +17,14 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
     EditText mEdtSMin, mEdtSMax;
     TextView mTvResult;
-    Button mBtnRandom;
+    Button mBtnRandom, mBtnAddRange, mBtnReset;
 
     String mTextSMin = "";
     String mTextSMax = "";
     Random mRandom = null;
     String mTextResult = "";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +55,18 @@ public class MainActivity extends AppCompatActivity {
             1. Phạm vi hoạt động.
             2. Kiểu dữ liệu trả về.
             3. Tên phương thức
+
+            Khởi tạo mảng
+            ArrayList<String> arrNames = new ArrayList<>();
+            // Thêm dữ liệu
+            arrNames.add("Teo");
+            arrNames.add("Tí");
+            // Xóa dữ liệu
+            arrNames.remove(1); // Xóa "Tí"
+            // Cập nhật phần tử
+            arrNames.set(0, "Tèo");
+
+
          */
 
 //        Task 1: Bàn Phím phải là số
@@ -60,7 +74,19 @@ public class MainActivity extends AppCompatActivity {
 //        Task 3: Chỉ nhập tối đa 3 chữ số
 //        Task 4: Chỉ nhập tối đa 3 chữ số
 
+//        Task 5: Add range xử lý validate và add dữ liệu vào mảng.
+//        Task 4: Reset sẽ xóa dữ liệu edittext, mảng, kết quả
+
+
+
         Init();
+        mBtnAddRange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         mBtnRandom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
         mEdtSMax.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                if (event.getAction() == KeyEvent.)
                 if (actionId == EditorInfo.IME_ACTION_DONE)
                     validateForm();
                 int sMax = Integer.parseInt(mTextSMax);
@@ -119,5 +144,7 @@ public class MainActivity extends AppCompatActivity {
         mEdtSMax = findViewById(R.id.textViewSomax);
         mBtnRandom = findViewById(R.id.buttonRandom);
         mTvResult = findViewById(R.id.textViewKetqua);
+        mBtnAddRange = findViewById(R.id.buttonAddRange);
+        mBtnReset = findViewById(R.id.buttonReset);
     }
 }
