@@ -4,15 +4,30 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
+    EditText mEdtSMin, mEdtSMax;
+    TextView mTvResult;
+    Button mBtnRandom;
 
+    String mTextSMin = "";
+    String mTextSMax = "";
+    Random mRandom = null;
+    String mTextResult = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         /*
         // Math
         1: làm tròn
@@ -32,7 +47,77 @@ public class MainActivity extends AppCompatActivity {
     //        int value = random.nextInt(10); // random 0-> 9
             int value = random.nextInt(max - min + 1)+min; // Random from min->max
             Log.d("Test", value + "");
+
+
+            Cách định nghĩa một phương thức
+            1. Phạm vi hoạt động.
+            2. Kiểu dữ liệu trả về.
+            3. Tên phương thức
          */
 
+//        Task 1: Bàn Phím phải là số
+//        Task 2: Chỉ nhập tối đa 3 chữ số
+//        Task 3: Chỉ nhập tối đa 3 chữ số
+//        Task 4: Chỉ nhập tối đa 3 chữ số
+
+        Init();
+        mBtnRandom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                validateForm();
+                int sMax = Integer.parseInt(mTextSMax);
+                int sMin = Integer.parseInt(mTextSMin);
+
+                if(sMin>= sMax){
+                    sMax = sMin + 1;
+                }
+                mEdtSMax.setText(String.valueOf(sMax));
+                mRandom = new Random();
+                int value = mRandom.nextInt(sMax- sMin +1) + sMin;
+
+                mTextResult += value + " - ";
+
+                mTvResult.setText(mTextResult);
+            }
+        });
+        mEdtSMax.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                if (event.getAction() == KeyEvent.)
+                if (actionId == EditorInfo.IME_ACTION_DONE)
+                    validateForm();
+                int sMax = Integer.parseInt(mTextSMax);
+                int sMin = Integer.parseInt(mTextSMin);
+
+                if(sMin>= sMax){
+                    sMax = sMin + 1;
+                }
+                mEdtSMax.setText(String.valueOf(sMax));
+                mRandom = new Random();
+                int value = mRandom.nextInt(sMax- sMin +1) + sMin;
+
+                mTextResult += value + " - ";
+
+                mTvResult.setText(mTextResult);
+                return true;
+
+            }
+        });
+    }
+    // Xử lý giá trị đầu vào edittext
+    private void validateForm(){
+        mTextSMin = mEdtSMin.getText().toString();
+        mTextSMax = mEdtSMax.getText().toString();
+
+        if (mTextSMin.isEmpty()||mTextSMax.isEmpty()){
+            Toast.makeText(MainActivity.this, "Bạn chưa nhập đủ thông tin!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+    private void Init() {
+        mEdtSMin = findViewById(R.id.textViewSomin);
+        mEdtSMax = findViewById(R.id.textViewSomax);
+        mBtnRandom = findViewById(R.id.buttonRandom);
+        mTvResult = findViewById(R.id.textViewKetqua);
     }
 }
