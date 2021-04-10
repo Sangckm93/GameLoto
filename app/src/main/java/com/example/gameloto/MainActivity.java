@@ -168,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
     // Xử lý giá trị đầu vào edittext
     private boolean validateForm(){
