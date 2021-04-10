@@ -3,7 +3,6 @@ package com.example.gameloto;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -12,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     Random mRandom = null;
     String mTextResult = "";
 
+    List<String> mArrList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,78 +68,118 @@ public class MainActivity extends AppCompatActivity {
             // Cập nhật phần tử
             arrNames.set(0, "Tèo");
 
-
          */
 
 //        Task 1: Bàn Phím phải là số
 //        Task 2: Chỉ nhập tối đa 3 chữ số
-//        Task 3: Chỉ nhập tối đa 3 chữ số
-//        Task 4: Chỉ nhập tối đa 3 chữ số
+//        Task 3: Kiểm tra số nhập vào đủ chưa, nếu không thì xuất ra thông báo
+//        Task 4: Ngoài việc nhấn Random để random thì có thể nhấn nút action done
 
 //        Task 5: Add range xử lý validate và add dữ liệu vào mảng.
 //        Task 4: Reset sẽ xóa dữ liệu edittext, mảng, kết quả
 
-
-
         Init();
+        mArrList = new ArrayList<>();
+        mRandom = new Random();
         mBtnAddRange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!validateForm()) return;    // Dừng phương thức
 
+                // Chuyển chuỗi thành số
+                int sMax = Integer.parseInt(mTextSMax);
+                int sMin = Integer.parseInt(mTextSMin);
+
+                if(sMin>= sMax){
+                    sMax = sMin + 1;
+                }
+
+                mEdtSMax.setText(String.valueOf(sMax));
+
+                mArrList.clear();
+                for (int i = sMin; i <= sMax; i++) {
+                    mArrList.add(String.valueOf(i));
+                }
+                Toast.makeText(MainActivity.this, "Hoàn tất việc thêm giá trị", Toast.LENGTH_SHORT).show();
+                disableView(mBtnAddRange);
+                disableView(mEdtSMax);
+                disableView(mEdtSMin);
             }
         });
 
         mBtnRandom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validateForm();
-                int sMax = Integer.parseInt(mTextSMax);
-                int sMin = Integer.parseInt(mTextSMin);
-
-                if(sMin>= sMax){
-                    sMax = sMin + 1;
+                if (mArrList.size() >0){
+                    int index = mRandom.nextInt(mArrList.size());
+                    int value = Integer.parseInt(mArrList.get(index));
+//                    if (mArrList.size() == 1){
+//                        mTextResult += value;
+//                    }else{
+//                        mTextResult += value + " - ";
+//                    }
+                    mTextResult += value + " - ";
+                    if (mArrList.size() == 1){
+                        // subString (vị trí bắt đầu cắt, vị trí kết htucs căt)
+                        mTextResult = mTextResult.substring(0,mTextResult.length()-3);
+                    }
+                    mTvResult.setText(mTextResult);
+                    mArrList.remove(index);
+                }else{
+                    Toast.makeText(MainActivity.this, "Hết số để Random!", Toast.LENGTH_SHORT).show();
                 }
-                mEdtSMax.setText(String.valueOf(sMax));
-                mRandom = new Random();
-                int value = mRandom.nextInt(sMax- sMin +1) + sMin;
-
-                mTextResult += value + " - ";
-
-                mTvResult.setText(mTextResult);
+            }
+        });
+        mBtnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Xóa dữ liệu
+                mEdtSMax.setText("");
+                mEdtSMin.setText("");
+                mArrList.clear();
+                mTvResult.setText("");
+                mTextResult = "";
+                // Bật tương tác cho view
+                enableView(mEdtSMin);
+                enableView(mEdtSMax);
+                enableView(mBtnAddRange);
             }
         });
         mEdtSMax.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE)
-                    validateForm();
-                int sMax = Integer.parseInt(mTextSMax);
-                int sMin = Integer.parseInt(mTextSMin);
-
-                if(sMin>= sMax){
-                    sMax = sMin + 1;
-                }
-                mEdtSMax.setText(String.valueOf(sMax));
-                mRandom = new Random();
-                int value = mRandom.nextInt(sMax- sMin +1) + sMin;
-
-                mTextResult += value + " - ";
-
-                mTvResult.setText(mTextResult);
+//                    validateForm();
+//                int sMax = Integer.parseInt(mTextSMax);
+//                int sMin = Integer.parseInt(mTextSMin);
+//
+//                if(sMin>= sMax){
+//                    sMax = sMin + 1;
+//                }
+//                mEdtSMax.setText(String.valueOf(sMax));
+//                mRandom = new Random();
+//                int value = mRandom.nextInt(sMax- sMin +1) + sMin;
+//
+//                mTextResult += value + " - ";
+//
+//                mTvResult.setText(mTextResult);
+                    mBtnAddRange.performClick();
                 return true;
 
             }
         });
+
     }
     // Xử lý giá trị đầu vào edittext
-    private void validateForm(){
+    private boolean validateForm(){
         mTextSMin = mEdtSMin.getText().toString();
         mTextSMax = mEdtSMax.getText().toString();
 
         if (mTextSMin.isEmpty()||mTextSMax.isEmpty()){
             Toast.makeText(MainActivity.this, "Bạn chưa nhập đủ thông tin!", Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
+        return true;
     }
     private void Init() {
         mEdtSMin = findViewById(R.id.textViewSomin);
@@ -146,5 +188,11 @@ public class MainActivity extends AppCompatActivity {
         mTvResult = findViewById(R.id.textViewKetqua);
         mBtnAddRange = findViewById(R.id.buttonAddRange);
         mBtnReset = findViewById(R.id.buttonReset);
+    }
+    private  void enableView(View v){
+        v.setEnabled(true);
+    }
+    private  void disableView(View v){
+        v.setEnabled(false);
     }
 }
